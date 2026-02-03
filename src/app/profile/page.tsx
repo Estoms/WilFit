@@ -91,6 +91,19 @@ export default async function ProfilePage() {
                         </button>
                     </div>
                 </form>
+
+                <div className="mt-8 border-t border-gray-800 pt-6">
+                    <h2 className="text-xl font-bold mb-4">Activity</h2>
+                    <a href="/history" className="block w-full bg-gray-900 border border-gray-800 rounded-lg p-4 flex items-center justify-between hover:border-indigo-500 transition-colors group">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-indigo-900/20 p-2 rounded-lg text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18" /><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" /></svg>
+                            </div>
+                            <span className="font-medium text-gray-200">Workout History</span>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500 group-hover:text-white"><path d="M9 18l6-6-6-6" /></svg>
+                    </a>
+                </div>
             </div>
         </div>
     )

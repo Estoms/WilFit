@@ -58,27 +58,32 @@ export default function SetInput({ onSave }: { onSave: (data: SetData) => Promis
                 <input
                     type="number"
                     placeholder="kg"
+                    min="0"
+                    step="0.5"
                     value={weight}
                     onChange={(e) => setWeight(e.target.value)}
-                    className="w-full bg-transparent text-center border-b border-gray-700 focus:border-indigo-500 outline-none text-white"
+                    className="w-full bg-transparent text-center border-b border-gray-700 focus:border-indigo-500 outline-none text-white appearance-none"
                 />
             </div>
             <div>
                 <input
                     type="number"
                     placeholder="reps"
+                    min="1"
                     value={reps}
                     onChange={(e) => setReps(e.target.value)}
-                    className="w-full bg-transparent text-center border-b border-gray-700 focus:border-indigo-500 outline-none text-white"
+                    className="w-full bg-transparent text-center border-b border-gray-700 focus:border-indigo-500 outline-none text-white appearance-none"
                 />
             </div>
             <div>
                 <input
                     type="number"
                     placeholder="RPE"
+                    min="1"
+                    max="10"
                     value={rpe}
                     onChange={(e) => setRpe(e.target.value)}
-                    className="w-full bg-transparent text-center border-b border-gray-700 focus:border-indigo-500 outline-none text-white text-sm"
+                    className="w-full bg-transparent text-center border-b border-gray-700 focus:border-indigo-500 outline-none text-white text-sm appearance-none"
                 />
             </div>
             <div>

@@ -142,6 +142,49 @@ export interface Database {
           estimated_1rm?: number | null
         }
       }
+      workout_templates: {
+        Row: {
+          id: string
+          user_id: string
+          name: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          name: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          name?: string
+          created_at?: string
+        }
+      }
+      template_exercises: {
+        Row: {
+          id: string
+          template_id: string
+          exercise_id: string
+          order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          template_id: string
+          exercise_id: string
+          order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          template_id?: string
+          exercise_id?: string
+          order?: number
+          created_at?: string
+        }
+      }
     }
   }
 }

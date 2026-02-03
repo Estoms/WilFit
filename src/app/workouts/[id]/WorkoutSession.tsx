@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Plus, CheckCircle, Timer, Dumbbell } from 'lucide-react'
+import { Plus, CheckCircle, Timer, Dumbbell, Save } from 'lucide-react'
 import SetInput from '@/components/workout/SetInput'
 import RestTimer from '@/components/workout/RestTimer'
-import { addSet, finishWorkout, startWorkout } from '@/app/workouts/actions'
+import { addSet, finishWorkout, startWorkout, saveWorkoutAsTemplate } from '@/app/workouts/actions'
 
 type Props = {
     workout: any
@@ -43,17 +43,33 @@ export default function WorkoutSession({ workout, exercises }: Props) {
                     </span>
                 </div>
 
-                {workout.status === 'planned' ? (
-                    <button onClick={handleStart} className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-bold animate-pulse">
-                        Start Workout
+                <div className="flex gap-2">
+                    <button
+                        onClick={async () => {
+                            const name = prompt('Routine Name:', workout.name)
+                            if (name) {
+                                await saveWorkoutAsTemplate(workout.id, name)
+                                alert('Routine saved!')
+                            }
+                        }}
+                        className="p-2 text-gray-400 hover:text-white"
+                        title="Save as Routine"
+                    >
+                        <Save size={20} />
                     </button>
-                ) : workout.status === 'in_progress' ? (
-                    <button onClick={handleFinish} className="bg-red-600/20 text-red-500 px-3 py-1 rounded-md text-sm font-medium">
-                        Finish
-                    </button>
-                ) : (
-                    <div className="text-green-500 font-bold">Completed</div>
-                )}
+
+                    {workout.status === 'planned' ? (
+                        <button onClick={handleStart} className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-bold animate-pulse">
+                            Start Workout
+                        </button>
+                    ) : workout.status === 'in_progress' ? (
+                        <button onClick={handleFinish} className="bg-red-600/20 text-red-500 px-3 py-1 rounded-md text-sm font-medium">
+                            Finish
+                        </button>
+                    ) : (
+                        <div className="text-green-500 font-bold">Completed</div>
+                    )}
+                </div>
             </header>
 
             {/* List of Exercises in this Workout */}
