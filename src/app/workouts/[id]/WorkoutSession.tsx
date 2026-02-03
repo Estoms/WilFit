@@ -101,7 +101,7 @@ export default function WorkoutSession({ workout, exercises }: Props) {
                             <div className="grid grid-cols-4 gap-2 text-xs text-gray-500 text-center mb-1">
                                 <div>KG</div>
                                 <div>REPS</div>
-                                <div>RPE</div>
+                                <div>Effort</div>
                                 <div>Status</div>
                             </div>
                             {group.sets.map((set: any, idx: number) => (

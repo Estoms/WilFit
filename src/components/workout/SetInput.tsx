@@ -78,7 +78,7 @@ export default function SetInput({ onSave }: { onSave: (data: SetData) => Promis
             <div>
                 <input
                     type="number"
-                    placeholder="RPE"
+                    placeholder="Effort"
                     min="1"
                     max="10"
                     value={rpe}
