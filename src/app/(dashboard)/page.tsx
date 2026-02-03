@@ -34,7 +34,8 @@ export default async function DashboardPage() {
         .eq('status', 'completed')
         .gte('end_time', oneWeekAgo.toISOString())
 
-    const weeklyVolume = weeklyWorkouts?.reduce((acc, curr) => acc + (curr.volume_load || 0), 0) || 0
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const weeklyVolume = (weeklyWorkouts as any[])?.reduce((acc: number, curr: any) => acc + (curr.volume_load || 0), 0) || 0
 
     // 3. Dynamic 1RM Chart (Best Exercise)
     // Find exercise with highest PR to show off
