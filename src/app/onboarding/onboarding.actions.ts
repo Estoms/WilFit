@@ -16,8 +16,8 @@ export async function submitOnboarding(formData: FormData) {
     const body_weight = parseFloat(formData.get('body_weight') as string)
     const preferred_unit = formData.get('preferred_unit') as 'kg' | 'lbs'
 
-    const { error } = await supabase
-        .from('profiles')
+    const query = supabase.from('profiles') as any
+    const { error } = await query
         .upsert({
             id: user.id,
             username,

@@ -22,7 +22,7 @@ export default async function ProfilePage() {
             <div className="max-w-md mx-auto">
                 <h1 className="text-3xl font-bold mb-6">Profile</h1>
 
-                <form action={updateProfile} className="space-y-6">
+                <form action={updateProfile as any} className="space-y-6">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-400">
                             Email

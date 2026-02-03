@@ -30,7 +30,7 @@ export async function searchExercises(query: string) {
     let results: ApiExercise[] = []
 
     if (localData && localData.length > 0) {
-        results = localData.map(ex => ({
+        results = (localData as any[]).map(ex => ({
             id: ex.id, // UUID
             name: ex.name,
             bodyPart: ex.body_part,
@@ -104,7 +104,7 @@ export async function importExercise(apiExercise: ApiExercise) {
         .single()
 
     if (existing) {
-        return { id: existing.id, isNew: false }
+        return { id: (existing as any).id, isNew: false }
     }
 
     // Insert
@@ -116,7 +116,7 @@ export async function importExercise(apiExercise: ApiExercise) {
             name: apiExercise.name,
             body_part: apiExercise.bodyPart,
             gif_url: apiExercise.gifUrl,
-        })
+        } as any)
         .select('id')
         .single()
 
@@ -124,5 +124,5 @@ export async function importExercise(apiExercise: ApiExercise) {
         return { error: error.message }
     }
 
-    return { id: newExercise.id, isNew: true }
+    return { id: (newExercise as any).id, isNew: true }
 }

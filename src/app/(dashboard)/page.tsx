@@ -2,15 +2,21 @@ import { createClient } from '@/utils/supabase/server'
 import OneRMChart from '@/components/dashboard/OneRMChart'
 import LastWorkoutWidget from '@/components/dashboard/LastWorkoutWidget'
 
+import { redirect } from 'next/navigation'
+
 export default async function DashboardPage() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return redirect('/login')
+    }
 
     // 1. Fetch Last Workout
     const { data: lastWorkout } = await supabase
         .from('workouts')
         .select('*')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .eq('status', 'completed')
         .order('end_time', { ascending: false })
         .limit(1)
@@ -31,7 +37,7 @@ export default async function DashboardPage() {
         const { data: sets } = await supabase
             .from('sets')
             .select('estimated_1rm, workouts(start_time)')
-            .eq('exercise_id', benchExercise.id)
+            .eq('exercise_id', (benchExercise as any).id)
             .order('id', { ascending: true }) // Chronological
 
         // Transform

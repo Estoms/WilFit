@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { submitOnboarding } from './actions'
+import { submitOnboarding } from './onboarding.actions'
 import { Dumbbell } from 'lucide-react'
 
 export default async function OnboardingPage() {
@@ -20,7 +20,7 @@ export default async function OnboardingPage() {
                     <p className="mt-2 text-gray-400">Let's set up your profile to personalize your experience.</p>
                 </div>
 
-                <form action={submitOnboarding} className="mt-8 space-y-6 bg-gray-900 p-8 rounded-2xl border border-gray-800 shadow-xl">
+                <form action={submitOnboarding as any} className="mt-8 space-y-6 bg-gray-900 p-8 rounded-2xl border border-gray-800 shadow-xl">
                     <div className="space-y-5">
                         <div>
                             <label htmlFor="username" className="block text-sm font-medium text-gray-300">

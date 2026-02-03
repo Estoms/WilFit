@@ -6,15 +6,17 @@ export default async function ExerciseDetailsPage({ params }: { params: Promise<
 
     const { id } = await params
 
-    const { data: exercise } = await supabase
+    const { data: exerciseData } = await supabase
         .from('exercises')
         .select('*')
         .eq('id', id)
         .single()
 
-    if (!exercise) {
+    if (!exerciseData) {
         return <div className="p-6">Exercise not found</div>
     }
+
+    const exercise = exerciseData as any;
 
     // Fetch PR History? Or just show current PR?
     // Schema has `current_pr` in `exercises` table.
