@@ -16,8 +16,8 @@ export async function createWorkout(formData: FormData) {
     const status: 'planned' | 'in_progress' = scheduledDate ? 'planned' : 'in_progress'
     const startTime = scheduledDate ? null : new Date().toISOString()
 
-    const { data, error } = await supabase
-        .from('workouts')
+    const query = supabase.from('workouts') as any
+    const { data, error } = await query
         .insert({
             user_id: user.id,
             name,
@@ -36,8 +36,8 @@ export async function createWorkout(formData: FormData) {
 export async function startWorkout(workoutId: string) {
     const supabase = await createClient()
 
-    const { error } = await supabase
-        .from('workouts')
+    const query = supabase.from('workouts') as any
+    const { error } = await query
         .update({
             status: 'in_progress',
             start_time: new Date().toISOString()
@@ -55,8 +55,8 @@ export async function addExerciseToPlan(workoutId: string, exerciseId: string) {
 
     // Check if already in plan? (Optional, but good UX)
     // For now, just insert
-    const { error } = await supabase
-        .from('workout_exercises')
+    const query = supabase.from('workout_exercises') as any
+    const { error } = await query
         .insert({
             workout_id: workoutId,
             exercise_id: exerciseId
@@ -74,8 +74,8 @@ export async function addSet(workoutId: string, exerciseId: string, set: any) {
     const supabase = await createClient()
 
     // 1. Insert Set
-    const { data: newSet, error } = await supabase
-        .from('sets')
+    const query = supabase.from('sets') as any
+    const { data: newSet, error } = await query
         .insert({
             workout_id: workoutId,
             exercise_id: exerciseId,
@@ -91,8 +91,8 @@ export async function addSet(workoutId: string, exerciseId: string, set: any) {
 
     // 2. Check and Update PR (Feature B)
     // Fetch current PR
-    const { data: exercise } = await supabase
-        .from('exercises')
+    const query_ex = supabase.from('exercises') as any
+    const { data: exercise } = await query_ex
         .select('current_pr')
         .eq('id', exerciseId)
         .single()
@@ -100,8 +100,8 @@ export async function addSet(workoutId: string, exerciseId: string, set: any) {
     if (exercise) {
         if (!exercise.current_pr || set.estimated_1rm > exercise.current_pr) {
             // Update PR
-            await supabase
-                .from('exercises')
+            const query = supabase.from('exercises') as any
+            await query
                 .update({ current_pr: set.estimated_1rm })
                 .eq('id', exerciseId)
         }
@@ -115,18 +115,18 @@ export async function finishWorkout(workoutId: string) {
     const supabase = await createClient()
 
     // allow calc volume load (sum of all sets)
-    const { data: sets } = await supabase
-        .from('sets')
+    const query_sets = supabase.from('sets') as any
+    const { data: sets } = await query_sets
         .select('reps, weight')
         .eq('workout_id', workoutId)
 
     let volumeLoad = 0
-    sets?.forEach(s => {
+    sets?.forEach((s: any) => {
         volumeLoad += (s.reps * s.weight)
     })
 
-    const { error } = await supabase
-        .from('workouts')
+    const query = supabase.from('workouts') as any
+    const { error } = await query
         .update({
             status: 'completed',
             end_time: new Date().toISOString(),

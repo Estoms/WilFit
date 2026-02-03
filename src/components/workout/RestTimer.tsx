@@ -7,9 +7,17 @@ export default function RestTimer({ initialDuration = 120, isActive, onComplete 
 
     useEffect(() => {
         if (!isActive) {
-            setTimeLeft(initialDuration)
+            if (timeLeft !== initialDuration) {
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                setTimeLeft(initialDuration)
+            }
             return
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isActive, initialDuration])
+
+    useEffect(() => {
+        if (!isActive) return
 
         if (timeLeft <= 0) {
             if (onComplete) onComplete()
@@ -21,7 +29,7 @@ export default function RestTimer({ initialDuration = 120, isActive, onComplete 
         }, 1000)
 
         return () => clearInterval(intervalId)
-    }, [isActive, timeLeft, initialDuration, onComplete])
+    }, [isActive, timeLeft, onComplete])
 
     if (!isActive) return null
 

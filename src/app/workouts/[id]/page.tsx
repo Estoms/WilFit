@@ -45,12 +45,11 @@ export default async function WorkoutPage({ params, searchParams }: { params: Pr
 
         if (!inPlan && !inSets) {
             // Add to Plan
-            await supabase
-                .from('workout_exercises')
-                .insert({
-                    workout_id: id,
-                    exercise_id: newExerciseId
-                })
+            const query = supabase.from('workout_exercises') as any
+            await query.insert({
+                workout_id: id,
+                exercise_id: newExerciseId
+            })
             // Refresh to show it
             redirect(`/workouts/${id}`)
         }

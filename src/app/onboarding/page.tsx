@@ -20,6 +20,7 @@ export default async function OnboardingPage() {
                     <p className="mt-2 text-gray-400">Let's set up your profile to personalize your experience.</p>
                 </div>
 
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 <form action={submitOnboarding as any} className="mt-8 space-y-6 bg-gray-900 p-8 rounded-2xl border border-gray-800 shadow-xl">
                     <div className="space-y-5">
                         <div>

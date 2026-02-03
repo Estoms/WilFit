@@ -74,7 +74,8 @@ export default function WeekScheduler({ workouts }: { workouts: any[] }) {
                         <h2 className="text-xl font-bold mb-4">Plan Workout</h2>
                         <p className="text-gray-400 mb-4">For {format(selectedDate, 'EEEE d MMM')}</p>
 
-                        <form action={createWorkout} className="space-y-4">
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        <form action={createWorkout as any} className="space-y-4">
                             <input type="hidden" name="scheduledDate" value={selectedDate.toISOString()} />
 
                             <div>

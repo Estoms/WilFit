@@ -31,21 +31,26 @@ export default async function DashboardPage() {
         .limit(1)
         .single()
 
-    let chartData: any[] = []
+    interface ChartData {
+        date: string
+        oneRM: number
+    }
+    let chartData: ChartData[] = []
 
     if (benchExercise) {
         const { data: sets } = await supabase
             .from('sets')
             .select('estimated_1rm, workouts(start_time)')
-            .eq('exercise_id', (benchExercise as any).id)
+            .eq('exercise_id', (benchExercise as { id: string }).id)
             .order('id', { ascending: true }) // Chronological
 
         // Transform
         if (sets) {
-            chartData = sets
-                .filter((s: any) => s.workouts) // Ensure workout exists
-                .map((s: any) => ({
-                    date: new Date(s.workouts.start_time).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+            type SetWithWorkout = { estimated_1rm: number; workouts: { start_time: string } | null }
+            chartData = (sets as unknown as SetWithWorkout[])
+                .filter(s => s.workouts) // Ensure workout exists
+                .map(s => ({
+                    date: new Date(s.workouts!.start_time).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
                     oneRM: s.estimated_1rm
                 }))
         }

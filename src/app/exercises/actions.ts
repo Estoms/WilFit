@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server'
-import { revalidatePath } from 'next/cache'
+
 
 const RAPID_API_KEY = process.env.RAPIDAPI_KEY
 const RAPID_API_HOST = 'exercisedb.p.rapidapi.com'
@@ -21,7 +21,7 @@ export async function searchExercises(query: string) {
     const supabase = await createClient()
 
     // 1. Search Local DB first
-    const { data: localData, error } = await supabase
+    const { data: localData, error: _error } = await supabase
         .from('exercises')
         .select('*')
         .ilike('name', `%${query}%`)

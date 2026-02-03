@@ -9,7 +9,14 @@ function calculate1RM(weight: number, reps: number) {
     return weight / (1.0278 - (0.0278 * reps))
 }
 
-export default function SetInput({ onSave }: { onSave: (data: any) => Promise<void> }) {
+interface SetData {
+    weight: number
+    reps: number
+    rpe: number | null
+    estimated_1rm: number
+}
+
+export default function SetInput({ onSave }: { onSave: (data: SetData) => Promise<void> }) {
     const [weight, setWeight] = useState<string>('')
     const [reps, setReps] = useState<string>('')
     const [rpe, setRpe] = useState<string>('')
