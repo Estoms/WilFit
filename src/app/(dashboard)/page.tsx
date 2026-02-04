@@ -27,25 +27,34 @@ export default async function DashboardPage() {
     const oneWeekAgo = new Date()
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
 
+    interface WeeklyWorkoutData {
+        volume_load: number | null
+    }
+
     const { data: weeklyWorkouts } = await supabase
         .from('workouts')
         .select('volume_load')
         .eq('user_id', user.id)
         .eq('status', 'completed')
         .gte('end_time', oneWeekAgo.toISOString())
+        .returns<WeeklyWorkoutData[]>()
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const weeklyVolume = (weeklyWorkouts as any[])?.reduce((acc: number, curr: any) => acc + (curr.volume_load || 0), 0) || 0
+    const weeklyVolume = weeklyWorkouts?.reduce((acc, curr) => acc + (curr.volume_load || 0), 0) || 0
 
     // 3. Dynamic 1RM Chart (Best Exercise)
     // Find exercise with highest PR to show off
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: bestExercise } = await (supabase
+    interface BestExerciseData {
+        id: string
+        name: string
+        current_pr: number | null
+    }
+
+    const { data: bestExercise } = await supabase
         .from('exercises')
         .select('id, name, current_pr')
         .order('current_pr', { ascending: false, nullsFirst: false })
         .limit(1)
-        .single() as any)
+        .maybeSingle<BestExerciseData>()
 
     interface ChartData {
         date: string
@@ -57,19 +66,22 @@ export default async function DashboardPage() {
     if (bestExercise) {
         chartTitle = `${bestExercise.name} Progress`
 
+        // Workaround for Supabase join typing: Define the expected result shape
+        type SetWithWorkout = {
+            estimated_1rm: number
+            workouts: { start_time: string } | null
+        }
+
         const { data: sets } = await supabase
             .from('sets')
             .select('estimated_1rm, workouts(start_time)')
             .eq('exercise_id', bestExercise.id)
             .order('id', { ascending: true })
-            .limit(20) // Limit points for clarity
+            .limit(20)
+            .returns<SetWithWorkout[]>()
 
         if (sets) {
-            type SetWithWorkout = { estimated_1rm: number; workouts: { start_time: string } | null }
-
-            // Group by workout/date to avoid noise? Or just take max per day?
-            // Simple approach: All sets
-            chartData = (sets as unknown as SetWithWorkout[])
+            chartData = sets
                 .filter(s => s.workouts && s.workouts.start_time)
                 .map(s => ({
                     date: new Date(s.workouts!.start_time).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),

@@ -97,7 +97,9 @@ export default function WeekScheduler({ workouts, templates }: { workouts: any[]
                         </div>
 
                         {activeTab === 'custom' ? (
-                            <form action={createWorkout} className="space-y-4">
+                            <form action={async (formData) => {
+                                await createWorkout(formData)
+                            }} className="space-y-4">
                                 <input type="hidden" name="scheduledDate" value={selectedDate.toISOString()} />
                                 <div>
                                     <label className="block text-sm text-gray-400 mb-1">Workout Name</label>
