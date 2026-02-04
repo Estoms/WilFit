@@ -39,12 +39,13 @@ export default async function DashboardPage() {
 
     // 3. Dynamic 1RM Chart (Best Exercise)
     // Find exercise with highest PR to show off
-    const { data: bestExercise } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: bestExercise } = await (supabase
         .from('exercises')
         .select('id, name, current_pr')
         .order('current_pr', { ascending: false, nullsFirst: false })
         .limit(1)
-        .single()
+        .single() as any)
 
     interface ChartData {
         date: string
